@@ -1,4 +1,6 @@
 const wastes = require('../Models/wasteModel')
+
+
 exports.addWasteController = async (req,res)=>{
 const {username,location,type,wasteId,date}=req.body
 let image = req.file.filename

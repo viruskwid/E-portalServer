@@ -9,6 +9,7 @@ const router = new express.Router()
 
 //register
 router.post('/register',userController.register)
+
 //login
 router.post('/login',userController.login)
 //router specific middleware
@@ -27,18 +28,22 @@ router.delete('/remove-complaints/:id',jwtMiddleware,complaintController.removeU
 //get all complaints
 router.get('/all-complaints',complaintController.getAllComplaints)
 
-//pedning status
-router.put('/:id/updateStatus',complaintController.updateStatus);
 //add waste
 router.post('/add-waste',jwtMiddleware,multerConfig.single('image'),wasteController.addWasteController)
 
 //allwaste admin
 router.get('/all-waste',wasteController.allWasteController)
+
 //user waste
 router.get('/user-waste',jwtMiddleware,wasteController.userWasteController)
+
 //remove waste
 router.delete('/remove-waste/:id',jwtMiddleware,wasteController.removeWasteController)
+
 //allusers
 router.get('/all-users',userController.allusersController)
+
+//status
+router.put('/approve/:id',multerConfig.single('image'),complaintController.editComplaints)
 
 module.exports=router

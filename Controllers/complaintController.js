@@ -2,7 +2,7 @@ const complaints = require("../Models/complaintModel");
 
 exports.addComplaintController = async (req, res) => {
   console.log("inside controller");
-  const { username, subject, complaint, complaintId ,pendingStatus } = req.body;
+  const { username, subject, complaint, complaintId, pendingStatus } = req.body;
   let image = req.file.filename;
   const userId = req.payload;
   console.log(username, subject, complaint, image, userId, complaintId);
@@ -18,7 +18,7 @@ exports.addComplaintController = async (req, res) => {
         image,
         userId,
         complaintId,
-        pendingStatus
+        pendingStatus,
       });
       await newComplaint.save();
       res.status(200).json(newComplaint);
@@ -41,32 +41,62 @@ exports.getUserComplaints = async (req, res) => {
 exports.removeUserComplaintController = async (req, res) => {
   console.log("inside controller");
   const { id } = req.params;
-  console.log(id)
+  console.log(id);
   try {
-    const removedUserComplaint = await complaints.findOneAndDelete({complaintId:id});
+    const removedUserComplaint = await complaints.findOneAndDelete({
+      complaintId: id,
+    });
     res.status(200).json(removedUserComplaint);
   } catch (error) {
     res.status(401).json(error);
   }
 };
 
-exports.getAllComplaints = async (req,res)=>{
-   try {
-    const allComplaints = await complaints.find()
-    res.status(200).json(allComplaints)
-   } catch (error) {
-    res.status(401).json(error)
-   }
-}
-exports.updateStatus = async (req, res) => {
+exports.getAllComplaints = async (req, res) => {
   try {
-    const {complaintId} = req.params.id;
-    const updatedComplaint = await complaints.findByIdAndUpdate(complaintId);
-    updatedComplaint.pendingStatus=!updatedComplaint.pendingStatus
-    await updatedComplaint.save()
-    res.json(updatedComplaint);
+    const allComplaints = await complaints.find();
+    res.status(200).json(allComplaints);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(401).json(error);
   }
 };
+
+exports.editComplaints = async (req, res) => {
+  console.log("inside edit complaints"); // Fixed the typo here
+  const { id } = req.params;
+  console.log(id);
+  const {
+    username,
+    subject,
+    complaint,
+    image,
+    userId,
+    complaintId,
+    pendingStatus
+  } = req.body;
+  console.log(pendingStatus);
+  console.log(userId);
+  const uploadimage = req.file ? req.file.filename : null; // Assuming `images` is not defined, replacing it with `null`
+  console.log(uploadimage);
+  try {
+    const updatedComplaint = await complaints.findOneAndUpdate(
+      { complaintId:id},
+      {
+        username,
+        subject,
+        complaint,
+        image,
+        userId,
+        uploadimage,
+        complaintId,
+        pendingStatus
+      },
+      { new: true }
+    )
+    res.status(200).json(updatedComplaint);
+  } catch (err) {
+    console.error("Error editing complaint:", err); 
+    res.status(401).json({ error: "Error editing complaint" });
+  }
+};
+
