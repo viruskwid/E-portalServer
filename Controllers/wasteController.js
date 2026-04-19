@@ -18,7 +18,8 @@ try {
             userId,
             wasteId,
             date,
-            image
+            image,
+            status
         })
         await newaste.save()
         res.status(200).json(newaste);
