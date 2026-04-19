@@ -45,5 +45,7 @@ router.get('/all-users',userController.allusersController)
 
 //status
 router.put('/approve/:id',multerConfig.single('image'),complaintController.editComplaints)
+//waste status
+router.put('/update-waste-status/:id', wasteController.updateWasteStatusController)
 
 module.exports=router

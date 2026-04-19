@@ -54,3 +54,19 @@ exports.removeWasteController = async (req,res)=>{
         res.status(401).json(error) 
     }
 }
+exports.updateWasteStatusController = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const updatedWaste = await wastes.findByIdAndUpdate(
+      id,
+      { status: status },
+      { new: true }
+    );
+
+    res.status(200).json(updatedWaste);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
