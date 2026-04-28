@@ -2,11 +2,6 @@ const wastes = require('../Models/wasteModel')
 
 
 exports.addWasteController = async (req,res)=>{
-    console.log("=== ADD WASTE CONTROLLER ===");
-    console.log("Body:", req.body);
-    console.log("File:", req.file);
-    console.log("UserId from JWT:", req.payload);
-    
 const {username,location,type,wasteId,date}=req.body
 let image = req.file ? req.file.filename : null;
 const userId = req.payload
@@ -23,8 +18,7 @@ try {
             userId,
             wasteId,
             date,
-            image,
-            status
+            image
         })
         await newaste.save()
         res.status(200).json(newaste);

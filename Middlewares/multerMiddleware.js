@@ -9,16 +9,12 @@ const storage = multer.diskStorage({
     }
 })
 const fileFilter = (req,file,callback)=>{
-    console.log("=== MULTER FILE FILTER ===");
-    console.log("File:", file);
     if (file.mimetype==="image/png" || file.mimetype==="image/jpg" || file.mimetype==="image/jpeg" || file.mimetype==="image/webp") {
         callback(null,true)
     } else {
          callback(null,false)
          return callback(new Error("please upload png,jpg,jpeg only"))   
     } 
-        
-    
 }
 const multerConfig = multer({
     storage,fileFilter
