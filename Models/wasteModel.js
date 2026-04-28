@@ -29,7 +29,11 @@ const wasteSchema = new mongoose.Schema({
 image:{
   type:String
   
-}
+},
+status: {
+    type: String,
+    default: 'pending'
+  }
 })
 const wastes = mongoose.model("wastes",wasteSchema)
 module.exports = wastes
