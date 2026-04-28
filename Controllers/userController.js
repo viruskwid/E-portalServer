@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-
+console.log("LOGIN SECRET:", process.env.JWT_SECRET);
   try {
     const existingUser = await users.findOne({ email, password });
 

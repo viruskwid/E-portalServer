@@ -1,19 +1,34 @@
- const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
-const jwtMiddleware = (req,res,next)=>{
+const jwtMiddleware = (req, res, next) => {
     console.log("inside jwt middleware");
-   
-    try{
-        const token = req.headers['authorization'].split(" ")[1]
-        if (token) {
-        const jwtResponse = jwt.verify(token,process.env.JWT_SECRET) 
-        req.payload = jwtResponse.userId
-            next()
-        } else {
-            res.status(401).json("provide token")
+    console.log("VERIFY SECRET:", process.env.JWT_SECRET);
+    
+    try {
+        const authHeader = req.headers['authorization'];
+
+        if (!authHeader) {
+            return res.status(401).json("Token missing");
         }
-   }catch{
-        res.status(403).json("please login")
+
+        const token = authHeader.split(" ")[1];
+
+        if (!token) {
+            return res.status(401).json("Token malformed");
+        }
+
+        const jwtResponse = jwt.verify(token, process.env.JWT_SECRET);
+
+        console.log("DECODED:", jwtResponse); // 🔍 debug
+
+        req.payload = jwtResponse.userId;
+
+        next();
+
+    } catch (err) {
+        console.log("JWT ERROR:", err.message); // 🔥 VERY IMPORTANT
+        return res.status(401).json("Invalid or expired token");
     }
 }
-module.exports =jwtMiddleware
+
+module.exports = jwtMiddleware;
